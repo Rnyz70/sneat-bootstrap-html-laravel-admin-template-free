@@ -28,7 +28,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: yourdockerhubuser/sneat-app
+          images: rnyz70/sneat-app
           tags: |
             type=ref,event=branch
             type=sha,prefix=

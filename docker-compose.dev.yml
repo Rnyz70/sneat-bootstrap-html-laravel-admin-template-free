@@ -1,0 +1,35 @@
+services:
+  app:
+    build: .
+    container_name: sneat-app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: laravel
+      DB_USERNAME: laravel
+      DB_PASSWORD: password
+    volumes:
+      - .:/var/www
+      - /var/www/vendor
+
+  mysql:
+    image: mysql:8.0
+    container_name: sneat-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

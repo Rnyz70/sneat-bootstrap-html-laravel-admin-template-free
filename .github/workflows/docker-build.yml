@@ -1,6 +1,10 @@
 ---
 name: Build and Push
+<<<<<<< HEAD
 on:
+=======
+'on':
+>>>>>>> 5aacbf9d88ab857d22dd882cfeaa0852c59f1cc6
   push:
     branches:
       - main
@@ -13,11 +17,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+<<<<<<< HEAD
+=======
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: '${{ runner.os }}-php-${{ hashFiles(''**/composer.lock'') }}'
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+>>>>>>> 5aacbf9d88ab857d22dd882cfeaa0852c59f1cc6
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
+<<<<<<< HEAD
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Extract metadata (tags, labels)
@@ -25,6 +45,15 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: yourdockerhubuser/sneat-app
+=======
+          username: '${{ secrets.DOCKER_USERNAME }}'
+          password: '${{ secrets.DOCKER_TOKEN }}'
+      - name: 'Extract metadata (tags, labels)'
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: rnyz70/sneat-app
+>>>>>>> 5aacbf9d88ab857d22dd882cfeaa0852c59f1cc6
           tags: |
             type=ref,event=branch
             type=sha,prefix=
@@ -32,6 +61,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+<<<<<<< HEAD
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -45,3 +75,10 @@ jobs:
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
+=======
+          push: '${{ github.event_name != ''pull_request'' }}'
+          tags: '${{ steps.meta.outputs.tags }}'
+          labels: '${{ steps.meta.outputs.labels }}'
+          cache-from: type=gha
+          cache-to: 'type=gha,mode=max'
+>>>>>>> 5aacbf9d88ab857d22dd882cfeaa0852c59f1cc6
